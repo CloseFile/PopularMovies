@@ -14,7 +14,7 @@ import java.util.List;
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewHolder> {
 
     private final ImageAdapterClickHandler mClickHandler;
-    private Context mContext;
+    private final Context mContext;
     private List<Movie> mMovieList;
 
     public ImagesAdapter(Context c, List<Movie> movieList, ImageAdapterClickHandler

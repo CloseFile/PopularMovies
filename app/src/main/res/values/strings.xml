@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="sort_by">order by</string>
+    <string name="sort_by_key_pref">order_by</string>
 
     <string name="jsonNames_results">results</string>
     <string name="jsonNames_title">title</string>
@@ -14,4 +14,6 @@
     <string name="menu_popularity">Popularity</string>
     <string name="menu_top_rated">Top Rated</string>
     <string name="action_detail">MovieDetail</string>
+
+    <string name="preference_order_defult_value" translatable="false">popular</string>
 </resources>
