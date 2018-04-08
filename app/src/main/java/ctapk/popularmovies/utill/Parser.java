@@ -41,43 +41,6 @@ public class Parser {
         return movieList;
     }
 
-//    public static List<Movie> fetchMovieData(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Movie> movieList = MovieDbJSONUtils.getMovieDetailsFromJson(jsonResponse);
-//        return movieList;
-//    }
-//
-//    public static List<Review> fetchMovieReview(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Review> movieReviewsList = null;
-//        movieReviewsList = MovieDbJSONUtils.getReviewFromJSON(jsonResponse);
-//        return movieReviewsList;
-//    }
-//
-//    public static List<Trailer> fetchMovieTrailer(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Trailer> movieTrailerList;
-//        movieTrailerList = MovieDbJSONUtils.getTrailerFromJSON(jsonResponse);
-//        return movieTrailerList;
-//    }
 
     public static List<Movie> getMoviesFromCursor(Context context) {
 
@@ -99,14 +62,7 @@ public class Parser {
                 null,
                 null);
 
-//        int primaryKeyColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry._ID);
-//        int idColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
-//        int titleColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE);
-//        int posterColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH);
-//        int backdropColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH);
-//        int releasedDateColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
-//        int synopsisColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW);
-//        int voteColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+
 //        mCursor != null &&
         if ( mCursor.getCount() > 0) {
             while (mCursor.moveToNext()) {
