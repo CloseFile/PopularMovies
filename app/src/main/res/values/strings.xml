@@ -8,11 +8,15 @@
     <string name="jsonNames_overview">overview</string>
     <string name="jsonNames_vote_average">vote_average</string>
     <string name="jsonNames_release_date">release_date</string>
+    <string name="jsonNames_movie_id">id</string>
+    <string name="jsonNames_backdropPath_path">backdrop_path</string>
 
+    <string name="background_image_content_description">Background image</string>
     <string name="poster_content_description">Poster</string>
     <string name="menu_title">Sort By</string>
     <string name="menu_popularity">Popularity</string>
     <string name="menu_top_rated">Top Rated</string>
+    <string name="menu_favorite">Favorite</string>
     <string name="action_detail">MovieDetail</string>
 
     <string name="preference_order_defult_value" translatable="false">popular</string>

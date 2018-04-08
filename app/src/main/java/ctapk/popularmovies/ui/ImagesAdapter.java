@@ -1,4 +1,4 @@
-package myapk.ru.popularmovies;
+package ctapk.popularmovies.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,11 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import ctapk.popularmovies.R;
+import ctapk.popularmovies.model.Movie;
+import ctapk.popularmovies.utill.NetworkUtils;
+
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewHolder> {
 
@@ -39,7 +44,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         final Movie currentMovie = mMovieList.get(position);
 
         Picasso.with(mContext)
-                .load(NetworkUtils.buildImageURL(currentMovie.getPosterPath()))
+                .load(NetworkUtils.buildImageURL(currentMovie.getPosterPath(),"w185"))
                 .error(R.drawable.ic_image_black_24dp)
                 .into(holder.image);
     }

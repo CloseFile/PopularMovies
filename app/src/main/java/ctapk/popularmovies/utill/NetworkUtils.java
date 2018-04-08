@@ -1,4 +1,4 @@
-package myapk.ru.popularmovies;
+package ctapk.popularmovies.utill;
 
 import android.net.Uri;
 
@@ -9,34 +9,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-import static myapk.ru.popularmovies.Constants.*;
-
 public class NetworkUtils {
 
-    static String buildImageURL(String path) {
+    public static String buildImageURL(String path, String imageSize) {
 
-        Uri requestUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
-                .appendPath(IMAGE_SIZE)
+        Uri requestUri = Uri.parse(Constants.IMAGE_BASE_URL).buildUpon()
+                .appendPath(imageSize)
                 .build();
 
         return requestUri.toString() + path;
     }
 
 
-    static URL buildMoviesURL(String sortOrder) throws MalformedURLException {
+    public static URL buildMoviesURL(String sortOrder) throws MalformedURLException {
 
         final String API_KEY_PARAM = "api_key";
 
-        Uri moviesUri = Uri.parse(MOVIES_BASE_URL).buildUpon()
+        Uri moviesUri = Uri.parse(Constants.MOVIES_BASE_URL).buildUpon()
                 .appendEncodedPath(sortOrder)
-                .appendQueryParameter(API_KEY_PARAM, MOVIE_DB_API_KEY)
+                .appendQueryParameter(API_KEY_PARAM, Constants.MOVIE_DB_API_KEY)
                 .build();
 
         return new URL(moviesUri.toString());
 
     }
 
-    static String getResponse(URL url) throws IOException {
+    public static String getResponse(URL url) throws IOException {
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         InputStream stream = connection.getInputStream();

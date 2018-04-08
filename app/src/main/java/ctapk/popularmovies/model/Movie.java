@@ -1,4 +1,4 @@
-package myapk.ru.popularmovies;
+package ctapk.popularmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -26,14 +26,26 @@ public class Movie implements Parcelable {
       "overview": "Set in a post-apocalyptic world, young Thomas is deposited in a community of boys after his memory is erased, soon learning they're all trapped in a maze that will require him to join forces with fellow “runners” for a shot at escape.",
       "release_date": "2014-09-10"
     }*/
-
+    private int mMovieTMDBId;
     private String title;
     private String posterPath;
+    private String mBackdropPath;
     private String overview;
-    private float voteAverage;
+    private String voteAverage;
     private String releaseDate;
 
-    public Movie(String title, String posterPath, String overview, float voteAverage, String releaseDate) {
+    public Movie(int movieId, String title, String posterPath, String backdropPath, String overview,
+                 String voteAverage, String releaseDate) {
+        this.mMovieTMDBId = movieId;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.mBackdropPath = backdropPath;
+        this.overview = overview;
+        this.voteAverage = voteAverage;
+        this.releaseDate = releaseDate;
+    }
+
+    public Movie(String title, String posterPath, String overview, String voteAverage, String releaseDate) {
         this.title = title;
         this.posterPath = posterPath;
         this.overview = overview;
@@ -45,8 +57,10 @@ public class Movie implements Parcelable {
         title = in.readString();
         posterPath = in.readString();
         overview = in.readString();
-        voteAverage = in.readFloat();
+        voteAverage = in.readString();
         releaseDate = in.readString();
+        mBackdropPath = in.readString();
+        mMovieTMDBId = in.readInt();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -72,8 +86,11 @@ public class Movie implements Parcelable {
         dest.writeString(title);
         dest.writeString(posterPath);
         dest.writeString(overview);
-        dest.writeFloat(voteAverage);
+        dest.writeString(voteAverage);
         dest.writeString(releaseDate);
+        dest.writeString(mBackdropPath);
+        //       dest.writeByte((byte) (mTrailerPath ? 1 : 0));
+        dest.writeInt(mMovieTMDBId);
     }
 
 
@@ -89,31 +106,31 @@ public class Movie implements Parcelable {
         return posterPath;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
 
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
 
-    public float getVoteAverage() {
+    public String getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
 
     public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+
+    public String getmBackdropPath() {
+        return mBackdropPath;
+    }
+
+//    public Boolean getmTrailerPath() {
+//        return mTrailerPath;
+//    }
+
+    public int getmMovieTMDBId() {
+        return mMovieTMDBId;
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="myapk.ru.popularmovies">
+    package="ctapk.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name="ctapk.popularmovies.ui.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity"
+        <activity android:name="ctapk.popularmovies.ui.DetailActivity"
             android:label="@string/action_detail"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="ctapk.popularmovies.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="ctapk.popularmovies.ui.MainActivity"/>
         </activity>
+
+        <provider
+            android:name="ctapk.popularmovies.data.MovieProvider"
+            android:authorities="ctapk.popularmovies"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>
