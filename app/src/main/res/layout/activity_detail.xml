@@ -5,22 +5,29 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/background_iv"
-        android:layout_width="fill_parent"
+    <!--<ImageView-->
+    <!--android:id="@+id/background_iv"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:visibility="invisible"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--app:layout_constraintDimensionRatio="w,9:16"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--tools:src="@drawable/header" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trailer_rv"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:adjustViewBounds="false"
-        android:scaleType="fitXY"
         app:layout_constraintDimensionRatio="w,9:16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/header" />
-    <!--app:layout_constraintDimensionRatio="w,2:1"-->
-    <!--android:background="@color/colorBackgroundTitle"-->
-    <!--android:src="@drawable/header"-->
-    <!--android:textSize="24sp"-->
+        tools:src="@tools:sample/avatars">
+
+    </android.support.v7.widget.RecyclerView>
+
     <ImageView
         android:id="@+id/poster_iv"
         android:layout_width="0dp"
@@ -33,29 +40,11 @@
         android:contentDescription="@string/poster_content_description"
         android:cropToPadding="false"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/background_iv"
+        app:layout_constraintBottom_toBottomOf="@+id/trailer_rv"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background_iv"
+        app:layout_constraintTop_toBottomOf="@+id/trailer_rv"
         tools:src="@tools:sample/avatars" />
-
-    <ListView
-        android:id="@+id/trailers_view"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="@+id/poster_iv"
-        app:layout_constraintRight_toRightOf="@+id/poster_iv"
-        app:layout_constraintTop_toBottomOf="@+id/poster_iv"
-        tools:listitem="@layout/button_test">
-
-        <!--<Button-->
-        <!--android:id="@+id/trailer_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/ic_play_arrow_black_24dp"-->
-        <!--android:text="1" />-->
-    </ListView>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -66,44 +55,50 @@
 
     <TextView
         android:id="@+id/date_tv"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/rating_tv"
         app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/trailer_rv"
+        tools:layout_editor_absoluteY="216dp"
         tools:text="@tools:sample/date/mmddyy" />
 
     <TextView
         android:id="@+id/rating_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/poster_iv"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/poster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/date_tv"
         tools:text="@tools:sample/date/day_of_week" />
 
-    <ScrollView
-        android:id="@+id/scroll_text"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/review_rv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/poster_iv">
 
-        <TextView
-            android:id="@+id/synopsis_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            tools:text="@tools:sample/lorem/random" />
+    </android.support.v7.widget.RecyclerView>
 
-    </ScrollView>
+    <!--<ScrollView-->
+    <!--android:id="@+id/scroll_text"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/poster_iv">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/synopsis_tv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:padding="8dp"-->
+    <!--tools:text="@tools:sample/lorem/random" />-->
+
+    <!--</ScrollView>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -112,17 +107,30 @@
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/background_iv"
-        app:layout_constraintEnd_toEndOf="@+id/background_iv"
-        app:layout_constraintTop_toBottomOf="@+id/background_iv"
-        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/trailer_rv"
+        app:layout_constraintEnd_toEndOf="@+id/trailer_rv"
+        app:layout_constraintTop_toBottomOf="@+id/trailer_rv"
+        app:srcCompat="@drawable/ic_favorite_black_24dp" />
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/review_rv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/rating_tv" />
 
 
     <!--app:layout_anchor="@+id/title_tv"-->
     <!--app:layout_anchorGravity="bottom|end"-->
 
-</android.support.constraint.ConstraintLayout>
-    <!--<?xml version="1.0" encoding="utf-8"?>--><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:fillViewport="true">-->
+</android.support.constraint.ConstraintLayout><!--<?xml version="1.0" encoding="utf-8"?>--><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:fillViewport="true">-->
 
     <!--<android.support.constraint.ConstraintLayout--><!--android:id="@+id/constraintLayout"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:background="#fff"--><!--tools:context="ctapk.popularmovies.ui.DetailActivity">-->
 

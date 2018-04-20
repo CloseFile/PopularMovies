@@ -1,12 +1,12 @@
 package ctapk.popularmovies.model;
 
-public class MovieReview {
+public class Review {
     private String author;
     private String content;
 
-    public MovieReview() {}
+    public Review() {}
 
-    public MovieReview(String author, String content) {
+    public Review(String author, String content) {
         this.author = author;
         this.content = content;
     }

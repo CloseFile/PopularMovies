@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
+
+import ctapk.popularmovies.adapters.ImagesAdapter;
 import ctapk.popularmovies.loaders.MovieLoader;
 import ctapk.popularmovies.utill.Constants;
 import ctapk.popularmovies.model.Movie;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private final String SORT_FAVORITE = Constants.SORT_ORDER_FAVORITE;
 
     private static final int MOVIES_LOADER = 22;
-    RecyclerView movieGrid, rollicList, recenseList;
+    RecyclerView movieGrid;
     String valuePreference;
 
     SharedPreferences preferences;
@@ -72,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         } else {
             loaderManager.restartLoader(MOVIES_LOADER, null, this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (valuePreference==SORT_FAVORITE) getSupportLoaderManager()
+                .restartLoader(MOVIES_LOADER,null,this);
     }
 
     @Override
@@ -120,63 +129,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         return super.onOptionsItemSelected(item);
     }
 
-//    private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
-//        @Override
-//        public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-//            return new CursorLoader(this,
-//                    MovieContract.MovieEntry.CONTENT_URI,
-//
-//
-//
-//                    FAVORITES_PROJECTION,
-//                    null,
-//                    null,
-//                    null);
-//        }
-//
-//        @Override
-//        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-//            mMovieAdapter.clear();
-//            mMovieAdapter.swapCursor(cursor);
-//            MovieDbHelper mOpenMoviesHelper = new MovieDbHelper(getActivity());
-//
-//            cursor = mOpenMoviesHelper.getReadableDatabase().query(MovieContract.MovieEntry.TABLE_MOVIES,
-//                    FAVORITES_PROJECTION, null, null, null, null, null);
-//            int primaryKeyColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry._ID);
-//            int idColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_MOVIE_ID);
-//            int titleColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_TITLE);
-//            int posterColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_POSTER_PATH);
-//            int backdropColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_BACKDROP_PATH);
-//            int releasedDateColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_RELEASE_DATE);
-//            int synopsisColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_SYNOPSIS);
-//            int voteColumnIndex = cursor.getColumnIndex(MovieContract.MovieEntry.DB_VOTE_AVERAGE);
-//
-//            if (cursor.getCount() > 0) {
-//                while (cursor.moveToNext()) {
-//                    int primaryKeyID = cursor.getInt(primaryKeyColumnIndex);
-//                    int currentID = cursor.getInt(idColumnIndex);
-//                    String currentTitle = cursor.getString(titleColumnIndex);
-//                    //String currentPosterPath = mCursor.getString(posterColumnIndex);
-//                    String currentBackdropPath = cursor.getString(backdropColumnIndex);
-//                    //String currentReleaseDate = mCursor.getString(releasedDateColumnIndex);
-//                    String currentSynopsis = cursor.getString(synopsisColumnIndex);
-//                    String currentVoteAverage = cursor.getString(voteColumnIndex);
-//
-//                    mMovie = new Movie(currentBackdropPath,
-//                            currentSynopsis, currentTitle, currentID, currentVoteAverage);
-//
-//                    movieList.add(mMovie);
-//                    //mMovieAdapter.addAll(movieList);
-//                }
-//            }
-//            mAdapter.setMovieData(movieList);
-//        }
-//
-//        @Override
-//        public void onLoaderReset(Loader<Cursor> loader) {
-//            mMovieAdapter.swapCursor(null);
-//        }
-//    };
 
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, final Bundle args) {

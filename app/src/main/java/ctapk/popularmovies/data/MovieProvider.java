@@ -133,12 +133,19 @@ public class MovieProvider extends ContentProvider {
         int numRowsDeleted;
 
         switch (match) {
+//            case CODE_MOVIE:
+//                String id = uri.getPathSegments().get(1);
+//                numRowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, "_id=?", new String[]{id});
+//                break;
+//            default:
+//                throw new UnsupportedOperationException("Unknown uri: " + uri);
             case CODE_MOVIE:
-                String id = uri.getPathSegments().get(1);
-                numRowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, "_id=?", new String[]{id});
+                selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
+                selectionArgs = new String[]{uri.getLastPathSegment()};
+                numRowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new IllegalArgumentException("delete is not supported for :" + uri);
         }
 
         if (numRowsDeleted != 0) {

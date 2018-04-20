@@ -45,15 +45,15 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
-    public Movie(String title, String posterPath, String overview, String voteAverage, String releaseDate) {
-        this.title = title;
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.voteAverage = voteAverage;
-        this.releaseDate = releaseDate;
-    }
+//    public Movie(String title, String posterPath, String overview, String voteAverage, String releaseDate) {
+//        this.title = title;
+//        this.posterPath = posterPath;
+//        this.overview = overview;
+//        this.voteAverage = voteAverage;
+//        this.releaseDate = releaseDate;
+//    }
 
-    protected Movie(Parcel in) {
+    private Movie(Parcel in) {
         title = in.readString();
         posterPath = in.readString();
         overview = in.readString();

@@ -55,7 +55,7 @@ public class MovieLoader extends AsyncTaskLoader<List<Movie>> {
                 URL moviesURL = NetworkUtils.buildMoviesURL(sortBy);
                 String responseFromHttpUrl = NetworkUtils.getResponse(moviesURL);
 
-                return mMovieList = Parser.getMoviesFromJson(responseFromHttpUrl, getContext());
+                return mMovieList = Parser.getMovies(responseFromHttpUrl,getContext());
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
