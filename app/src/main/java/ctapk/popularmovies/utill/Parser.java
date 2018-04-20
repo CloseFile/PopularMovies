@@ -2,26 +2,36 @@ package ctapk.popularmovies.utill;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import ctapk.popularmovies.R;
-import ctapk.popularmovies.data.MovieContract;
 import ctapk.popularmovies.model.Movie;
+import ctapk.popularmovies.model.Review;
+import ctapk.popularmovies.model.Trailer;
 
 import static ctapk.popularmovies.data.MovieContract.MovieEntry.*;
 
 
 public class Parser {
 
+    private static final String MD_AUTHOR_REVIEW = "author";
+    private static final String MD_CONTENT_REVIEW = "content";
+    private static final String MD_SITE_VIDEO = "site";
+    private static final String MD_NAME_VIDEO = "name";
+    private static final String MD_VIDEO_SEARCH_KEY = "key";
+
     private static List<Movie> movieList;
 
-    public static List<Movie> getMoviesFromJson(String jsonSource, Context context) throws JSONException {
+    public static List<Movie> getMovies(String jsonSource, Context context) throws JSONException {
         movieList = new ArrayList<>();
 
         JSONObject rootObj = new JSONObject(jsonSource);
@@ -41,43 +51,45 @@ public class Parser {
         return movieList;
     }
 
-//    public static List<Movie> fetchMovieData(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Movie> movieList = MovieDbJSONUtils.getMovieDetailsFromJson(jsonResponse);
-//        return movieList;
-//    }
-//
-//    public static List<Review> fetchMovieReview(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Review> movieReviewsList = null;
-//        movieReviewsList = MovieDbJSONUtils.getReviewFromJSON(jsonResponse);
-//        return movieReviewsList;
-//    }
-//
-//    public static List<Trailer> fetchMovieTrailer(String requestUrl) throws JSONException {
-//        URL url = createUrl(requestUrl);
-//        String jsonResponse = null;
-//        try {
-//            jsonResponse = getResponseFromHttpUrl(url);
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-//        }
-//        List<Trailer> movieTrailerList;
-//        movieTrailerList = MovieDbJSONUtils.getTrailerFromJSON(jsonResponse);
-//        return movieTrailerList;
-//    }
+
+    public static List<Review> getReviews(String requestUrl, Context context) throws JSONException {
+
+        List<Review> reviewList = new ArrayList<>();
+
+        JSONObject baseJSONResponse = new JSONObject(requestUrl);
+        JSONArray movieReviewArray = baseJSONResponse.getJSONArray(context.getString(R.string.jsonNames_results));
+
+        for (int i = 0; i < movieReviewArray.length(); i++) {
+            JSONObject currentMovieReview = movieReviewArray.getJSONObject(i);
+
+            String reviewContent = currentMovieReview.getString(MD_CONTENT_REVIEW);
+            String reviewAuthor = currentMovieReview.getString(MD_AUTHOR_REVIEW);
+
+            Review movieReview = new Review(reviewAuthor, reviewContent);
+            reviewList.add(movieReview);
+        }
+        return reviewList;
+    }
+
+
+    public static List<Trailer> getTrailers(String requestUrl, Context context) throws JSONException {
+        List<Trailer> trailerList = new ArrayList<>();
+
+        JSONObject baseJSONResponse = new JSONObject(requestUrl);
+        JSONArray movieTrailerArray = baseJSONResponse.getJSONArray(context.getString(R.string.jsonNames_results));
+        for (int i = 0; i < movieTrailerArray.length(); i++) {
+            JSONObject currentMovieTrailer = movieTrailerArray.getJSONObject(i);
+
+            String trailerName = currentMovieTrailer.getString(MD_NAME_VIDEO);
+            String trailerKey = currentMovieTrailer.getString(MD_VIDEO_SEARCH_KEY);
+            String trailerSite = currentMovieTrailer.getString(MD_SITE_VIDEO);
+
+            Trailer movieTrailer = new Trailer(trailerKey, trailerName, trailerSite);
+            trailerList.add(movieTrailer);
+        }
+        return trailerList;
+    }
+
 
     public static List<Movie> getMoviesFromCursor(Context context) {
 
@@ -87,6 +99,7 @@ public class Parser {
                 _ID,
                 COLUMN_MOVIE_ID,
                 COLUMN_TITLE,
+                COLUMN_POSTER_PATH,
                 COLUMN_BACKDROP_PATH,
                 COLUMN_OVERVIEW,
                 COLUMN_RELEASE_DATE,
@@ -99,23 +112,17 @@ public class Parser {
                 null,
                 null);
 
-//        int primaryKeyColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry._ID);
-//        int idColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
-//        int titleColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE);
-//        int posterColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH);
-//        int backdropColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH);
-//        int releasedDateColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
-//        int synopsisColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW);
-//        int voteColumnIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+
 //        mCursor != null &&
-        if ( mCursor.getCount() > 0) {
+        if (mCursor.getCount() > 0) {
+
             while (mCursor.moveToNext()) {
                 int primaryKeyID = mCursor.getInt(mCursor.getColumnIndex(_ID));
                 int currentID = mCursor.getInt(mCursor.getColumnIndex(COLUMN_MOVIE_ID));
                 String currentTitle = mCursor.getString(mCursor.getColumnIndex(COLUMN_TITLE));
-                String currentPosterPath = mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH));
+                String currentPosterPath = mCursor.getString(mCursor.getColumnIndex(COLUMN_POSTER_PATH));
                 String currentBackdropPath = mCursor.getString(mCursor.getColumnIndex(COLUMN_BACKDROP_PATH));
-                String currentReleaseDate = mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE));
+                String currentReleaseDate = mCursor.getString(mCursor.getColumnIndex(COLUMN_RELEASE_DATE));
                 String currentSynopsis = mCursor.getString(mCursor.getColumnIndex(COLUMN_OVERVIEW));
                 String currentVoteAverage = mCursor.getString(mCursor.getColumnIndex(COLUMN_VOTE_AVERAGE));
 
