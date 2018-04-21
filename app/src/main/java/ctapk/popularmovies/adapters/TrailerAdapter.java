@@ -53,15 +53,13 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
         return trailerList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        //       @BindView(R.id.iv_trailer)
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView trailerImageView=itemView.findViewById(R.id.iv_trailer);
 
         private Trailer trailer;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-//            ButterKnife.bind(this, itemView);
             itemView = itemView.findViewById(R.id.iv_trailer);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

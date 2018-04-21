@@ -46,20 +46,16 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private static final int TRAILER_LOADER = 11;
     private static final int REVIEW_LOADER = 22;
     Context mContext;
-    private ImageView posterIV, backgroundIV;
+    private ImageView posterIV;
     private TextView titleTV, ratingTV, dateTV;
     Movie parcelledMovie;
     private boolean isLargeLayout = false;
-    FloatingActionButton fab, fabSmall;
-    private RecyclerView reviewRecyclerView;
+    FloatingActionButton fab;
     private ReviewAdapter reviewAdapter;
     private TrailerAdapter trailerAdapter;
-    private RecyclerView trailerRecyclerView;
 
     private List<String> movieReviews = new ArrayList<>();
     private List<Trailer> trailers = new ArrayList<>();
-
- //   String overview = parcelledMovie.getOverview();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,15 +121,16 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         });
 
         getSupportLoaderManager().initLoader(REVIEW_LOADER, null, this);
-        reviewRecyclerView = findViewById(R.id.review_rv);
+        RecyclerView reviewRecyclerView = findViewById(R.id.review_rv);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerView.setHasFixedSize(true);
         reviewAdapter = new ReviewAdapter(this, movieReviews);
         reviewRecyclerView.setAdapter(reviewAdapter);
 
         getSupportLoaderManager().initLoader(TRAILER_LOADER, null, this);
-        trailerRecyclerView = findViewById(R.id.trailer_rv);
-        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        RecyclerView trailerRecyclerView = findViewById(R.id.trailer_rv);
+        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
         trailerRecyclerView.setHasFixedSize(true);
         // add pager behavior
         PagerSnapHelper snapHelper = new PagerSnapHelper();
@@ -142,6 +139,16 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         trailerRecyclerView.setAdapter(trailerAdapter);
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFavorite()) {
+            fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        } else {
+            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
     }
 
     @Override
@@ -154,12 +161,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void setItemToViews(Movie movieItem) {
-//        Picasso.with(mContext).load(NetworkUtils.buildImageURL(movieItem.getmBackdropPath(), "w500"))
-//                .into(backgroundIV);
-        Picasso.with(mContext).load(NetworkUtils.buildImageURL(movieItem.getPosterPath(), "w185"))
+
+        Picasso.with(mContext)
+                .load(NetworkUtils.buildImageURL(movieItem.getPosterPath(), "w185"))
+                .placeholder(R.drawable.ic_image)
+                .error(R.drawable.ic_broken_image)
                 .into(posterIV);
-//        titleTV.setText(movieItem.getTitle());
-//        synopsisTV.setText(movieItem.getOverview());
+
         ratingTV.setText(movieItem.getVoteAverage());
         dateTV.setText(movieItem.getReleaseDate());
         titleTV.setText(movieItem.getTitle());
@@ -223,21 +231,20 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             trailerAdapter.setTrailerList((List<Trailer>) data);
         } else if (id == REVIEW_LOADER) {
             List<Review> reviews = (List<Review>) data;
+            List<String> reviewContent = new ArrayList<>();
+
             if (reviews != null && reviews.size() > 0) {
-                List<String> reviewContent = new ArrayList<>();
 
                 for (int i = 0; i < reviews.size(); i++) {
                     reviewContent.add(reviews.get(i).getContent());
                 }
-
-                // Add overview as 1 element in RV
-                reviewContent.add(0,parcelledMovie.getOverview());
-
-                reviewAdapter.setReviews(reviewContent);
             } else {
                 Toast.makeText(this, "No reviews", Toast.LENGTH_SHORT).show();
                 //               emptyReviewTv.setVisibility(View.VISIBLE);
             }
+            // Add overview as 1 element in RV
+            reviewContent.add(0, parcelledMovie.getOverview());
+            reviewAdapter.setReviews(reviewContent);
         }
     }
 

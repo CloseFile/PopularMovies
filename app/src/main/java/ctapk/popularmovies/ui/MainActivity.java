@@ -3,6 +3,8 @@ package ctapk.popularmovies.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ctapk.popularmovies.adapters.ImagesAdapter;
@@ -29,24 +32,27 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         ImagesAdapter.ImageAdapterClickHandler {
 
     private final String SORT_POPULAR = Constants.SORT_ORDER_POPULAR;
-    private final String SORT_RATED = Constants.SORT_ORDER_HIGHEST_RATED;
-    private final String SORT_FAVORITE = Constants.SORT_ORDER_FAVORITE;
 
     private static final int MOVIES_LOADER = 22;
-    RecyclerView movieGrid;
+    RecyclerView movieRecyclerView;
     String valuePreference;
 
     SharedPreferences preferences;
 
     private ProgressBar mLoadingIndicator;
     private ImagesAdapter mAdapter;
-
     List<Movie> movieList;
+    int scrollPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList("movie_list");
+
+        }
 
         // Set start value of preference:  "order by popularity"
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -59,12 +65,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         mLoadingIndicator = findViewById(R.id.loading_indicator);
 
-        movieGrid = findViewById(R.id.movie_grid_rv);
-        movieGrid.setLayoutManager(new GridLayoutManager(this, 2));
-        movieGrid.setHasFixedSize(true);
+        movieRecyclerView = findViewById(R.id.movie_grid_rv);
+        movieRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        movieRecyclerView.setHasFixedSize(true);
         mAdapter = new ImagesAdapter(this, movieList, this);
 
-        movieGrid.setAdapter(mAdapter);
+        movieRecyclerView.setAdapter(mAdapter);
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<List<Movie>> managerLoader = loaderManager.getLoader(MOVIES_LOADER);
@@ -77,10 +83,31 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (valuePreference==SORT_FAVORITE) getSupportLoaderManager()
-                .restartLoader(MOVIES_LOADER,null,this);
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        scrollPosition = ((GridLayoutManager) movieRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        savedInstanceState.putParcelableArrayList("movie_list", (ArrayList<? extends Parcelable>) movieList);
+        savedInstanceState.putInt("pos", scrollPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movieList = savedInstanceState.getParcelableArrayList("movie_list");
+        scrollPosition = savedInstanceState.getInt("pos");
+        mAdapter = new ImagesAdapter(this, movieList,this);
+        movieRecyclerView.setAdapter(mAdapter);
+ //       movieRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
+
+        // ScrollToPosition only work for me with delay
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            public void run() {
+                movieRecyclerView.scrollToPosition(scrollPosition);
+            }
+        };
+        handler.postDelayed(r, 500);
     }
 
     @Override
@@ -105,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
                 return true;
             case R.id.action_sort_top_rated:
+                String SORT_RATED = Constants.SORT_ORDER_HIGHEST_RATED;
                 if (valuePreference != SORT_RATED) {
                     valuePreference = SORT_RATED;
 
@@ -115,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
                 return true;
             case R.id.action_favorite:
+                String SORT_FAVORITE = Constants.SORT_ORDER_FAVORITE;
                 if (valuePreference != SORT_FAVORITE) {
                     valuePreference = SORT_FAVORITE;
 
@@ -147,10 +176,14 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         } else {
             mAdapter.setMovieData(data);
         }
+
+
     }
 
     @Override
     public void onLoaderReset(Loader<List<Movie>> loader) {
+        movieRecyclerView.setAdapter(null);
+
     }
 
     @Override
