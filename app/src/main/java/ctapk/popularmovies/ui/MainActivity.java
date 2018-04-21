@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         ImagesAdapter.ImageAdapterClickHandler {
 
     private final String SORT_POPULAR = Constants.SORT_ORDER_POPULAR;
+    String SORT_FAVORITE = Constants.SORT_ORDER_FAVORITE;
 
     private static final int MOVIES_LOADER = 22;
     RecyclerView movieRecyclerView;
@@ -96,9 +97,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onRestoreInstanceState(savedInstanceState);
         movieList = savedInstanceState.getParcelableArrayList("movie_list");
         scrollPosition = savedInstanceState.getInt("pos");
-        mAdapter = new ImagesAdapter(this, movieList,this);
+        mAdapter = new ImagesAdapter(this, movieList, this);
         movieRecyclerView.setAdapter(mAdapter);
- //       movieRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
+        //       movieRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
 
         // ScrollToPosition only work for me with delay
         Handler handler = new Handler();
@@ -116,6 +117,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (valuePreference == SORT_FAVORITE) getSupportLoaderManager()
+                .restartLoader(MOVIES_LOADER, null, this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -143,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
                 return true;
             case R.id.action_favorite:
-                String SORT_FAVORITE = Constants.SORT_ORDER_FAVORITE;
                 if (valuePreference != SORT_FAVORITE) {
                     valuePreference = SORT_FAVORITE;
 
