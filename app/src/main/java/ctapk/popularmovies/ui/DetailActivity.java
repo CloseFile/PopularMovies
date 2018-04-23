@@ -129,6 +129,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
         getSupportLoaderManager().initLoader(TRAILER_LOADER, null, this);
         RecyclerView trailerRecyclerView = findViewById(R.id.trailer_rv);
+
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
         trailerRecyclerView.setHasFixedSize(true);
@@ -137,6 +138,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         snapHelper.attachToRecyclerView(trailerRecyclerView);
         trailerAdapter = new TrailerAdapter(this, trailers);
         trailerRecyclerView.setAdapter(trailerAdapter);
+        trailerRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
 
 
     }

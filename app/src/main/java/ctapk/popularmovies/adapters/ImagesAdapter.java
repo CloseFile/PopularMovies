@@ -58,6 +58,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         }
     }
 
+    @Override
+    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(observer);
+    }
+
     public void setMovieData(List<Movie> movieItems) {
         mMovieList = movieItems;
         notifyDataSetChanged();

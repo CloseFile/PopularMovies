@@ -3,7 +3,7 @@ package ctapk.popularmovies.utill;
 
 import ctapk.popularmovies.BuildConfig;
 
-public class Constants {
+public final class Constants {
     static final String MOVIE_DB_API_KEY = BuildConfig.MOVIE_DB_API_KEY;
     final static String MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
