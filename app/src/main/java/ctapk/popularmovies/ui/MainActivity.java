@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private ImagesAdapter mAdapter;
     List<Movie> movieList;
     int scrollPosition;
-    private RecyclerViewReadyCallback recyclerViewReadyCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +66,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         mLoadingIndicator = findViewById(R.id.loading_indicator);
 
         movieRecyclerView = findViewById(R.id.movie_grid_rv);
-
-        movieRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                if (recyclerViewReadyCallback != null) {
-                    recyclerViewReadyCallback.onLayoutReady();
-                }
-                movieRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
-
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        movieRecyclerView.setLayoutManager(layoutManager);
+        movieRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         movieRecyclerView.setHasFixedSize(true);
         mAdapter = new ImagesAdapter(this, movieList, this);
 
@@ -113,24 +98,16 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         scrollPosition = savedInstanceState.getInt("pos");
         mAdapter = new ImagesAdapter(this, movieList, this);
         movieRecyclerView.setAdapter(mAdapter);
+        //       movieRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
 
-        recyclerViewReadyCallback = new RecyclerViewReadyCallback() {
-            @Override
-            public void onLayoutReady() {
-                //
-                //here comes your code that will be executed after all items has are laid down
-                //
+        // ScrollToPosition only work for me with delay
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            public void run() {
                 movieRecyclerView.scrollToPosition(scrollPosition);
             }
         };
-//        ScrollToPosition only work for me with delay
-//        Handler handler = new Handler();
-//        Runnable r = new Runnable() {
-//            public void run() {
-//                movieRecyclerView.scrollToPosition(scrollPosition);
-//            }
-//        };
-//        handler.postDelayed(r, 500);
+        handler.postDelayed(r, 500);
     }
 
     @Override

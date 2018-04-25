@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +15,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
+import android.support.v4.provider.FontRequest;
+import android.support.v4.provider.FontsContractCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,26 +61,25 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private List<String> movieReviews = new ArrayList<>();
     private List<Trailer> trailers = new ArrayList<>();
+    private Handler mHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //       setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail);
 
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        final ConstraintSet constraintSet1 = new ConstraintSet();
-        final ConstraintSet constraintSet2 = new ConstraintSet();
-        constraintSet2.clone(this, R.layout.activity_movie_transition);
-        setContentView(R.layout.activity_detail);
+//        final ConstraintSet constraintSet1 = new ConstraintSet();
+//        final ConstraintSet constraintSet2 = new ConstraintSet();
+//        constraintSet2.clone(this, R.layout.activity_movie_transition);
+//        setContentView(R.layout.activity_detail);
+//
+//        final ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
+//        constraintSet1.clone(constraintLayout);
 
-        final ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
-        constraintSet1.clone(constraintLayout);
-
-
-//        backgroundIV = findViewById(R.id.background_iv);
         posterIV = findViewById(R.id.poster_iv);
         titleTV = findViewById(R.id.title_tv);
         ratingTV = findViewById(R.id.rating_tv);
@@ -138,9 +142,41 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         snapHelper.attachToRecyclerView(trailerRecyclerView);
         trailerAdapter = new TrailerAdapter(this, trailers);
         trailerRecyclerView.setAdapter(trailerAdapter);
+
         trailerRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
 
+        FontsContractCompat.requestFont(this, request, callback, getHandlerThreadHandler());
+    }
 
+    FontRequest request = new FontRequest(
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            "Lobster",
+            R.array.com_google_android_gms_fonts_certs);
+
+    FontsContractCompat.FontRequestCallback callback = new FontsContractCompat
+            .FontRequestCallback() {
+        @Override
+        public void onTypefaceRetrieved(Typeface typeface) {
+            titleTV.setTypeface(typeface);
+        }
+
+        @Override
+        public void onTypefaceRequestFailed(int reason) {
+            Toast.makeText(DetailActivity.this,
+                    getString(R.string.request_failed, reason), Toast.LENGTH_LONG)
+                    .show();
+        }
+    };
+
+    private Handler getHandlerThreadHandler() {
+
+        if (mHandler == null) {
+            HandlerThread handlerThread = new HandlerThread("fonts");
+            handlerThread.start();
+            mHandler = new Handler(handlerThread.getLooper());
+        }
+        return mHandler;
     }
 
     @Override
