@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private ProgressBar mLoadingIndicator;
     private ImagesAdapter mAdapter;
     List<Movie> movieList;
-    int scrollPosition;
+    int scrollPosition=RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         movieRecyclerView = findViewById(R.id.movie_grid_rv);
         movieRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         movieRecyclerView.setHasFixedSize(true);
-        mAdapter = new ImagesAdapter(this, movieList, this);
+        mAdapter = new ImagesAdapter(this, this);
 
         movieRecyclerView.setAdapter(mAdapter);
 
@@ -92,22 +92,22 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        movieList = savedInstanceState.getParcelableArrayList("movie_list");
-        scrollPosition = savedInstanceState.getInt("pos");
-        mAdapter = new ImagesAdapter(this, movieList, this);
-        movieRecyclerView.setAdapter(mAdapter);
+        protected void onRestoreInstanceState(Bundle savedInstanceState) {
+            super.onRestoreInstanceState(savedInstanceState);
+            movieList = savedInstanceState.getParcelableArrayList("movie_list");
+            scrollPosition = savedInstanceState.getInt("pos");
+//            mAdapter = new ImagesAdapter(this, this);
+//            movieRecyclerView.setAdapter(mAdapter);
         //       movieRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
 
         // ScrollToPosition only work for me with delay
-        Handler handler = new Handler();
-        Runnable r = new Runnable() {
-            public void run() {
-                movieRecyclerView.scrollToPosition(scrollPosition);
-            }
-        };
-        handler.postDelayed(r, 500);
+//        Handler handler = new Handler();
+//        Runnable r = new Runnable() {
+//            public void run() {
+//                movieRecyclerView.scrollToPosition(scrollPosition);
+//            }
+//        };
+//        handler.postDelayed(r, 500);
     }
 
     @Override
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     protected void onResume() {
         super.onResume();
-        if (valuePreference == SORT_FAVORITE) getSupportLoaderManager()
-                .restartLoader(MOVIES_LOADER, null, this);
+        if (valuePreference == SORT_FAVORITE)
+            getSupportLoaderManager().restartLoader(MOVIES_LOADER, null, this);
     }
 
     @Override
@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         } else {
             mAdapter.setMovieData(data);
         }
+
+        if (scrollPosition == RecyclerView.NO_POSITION) scrollPosition = 0;
+        movieRecyclerView.smoothScrollToPosition(scrollPosition);
 
 
     }

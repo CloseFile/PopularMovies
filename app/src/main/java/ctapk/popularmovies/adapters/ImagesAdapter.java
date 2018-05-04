@@ -22,10 +22,8 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
     private final Context mContext;
     private List<Movie> mMovieList;
 
-    public ImagesAdapter(Context c, List<Movie> movieList, ImageAdapterClickHandler
-            imageAdapterClickHandler) {
+    public ImagesAdapter(Context c,  ImageAdapterClickHandler imageAdapterClickHandler) {
         mContext = c;
-        mMovieList = movieList;
         mClickHandler = imageAdapterClickHandler;
     }
 
@@ -58,10 +56,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         }
     }
 
-    @Override
-    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-        super.registerAdapterDataObserver(observer);
-    }
+//    @Override
+//    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.registerAdapterDataObserver(observer);
+//    }
 
     public void setMovieData(List<Movie> movieItems) {
         mMovieList = movieItems;
