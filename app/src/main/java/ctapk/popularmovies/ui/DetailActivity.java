@@ -59,8 +59,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private ReviewAdapter reviewAdapter;
     private TrailerAdapter trailerAdapter;
 
-    private List<String> movieReviews = new ArrayList<>();
-    private List<Trailer> trailers = new ArrayList<>();
+
     private Handler mHandler = null;
 
     @Override
@@ -128,7 +127,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         RecyclerView reviewRecyclerView = findViewById(R.id.review_rv);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerView.setHasFixedSize(true);
-        reviewAdapter = new ReviewAdapter(this, movieReviews);
+        reviewAdapter = new ReviewAdapter(this);
         reviewRecyclerView.setAdapter(reviewAdapter);
 
         getSupportLoaderManager().initLoader(TRAILER_LOADER, null, this);
@@ -140,7 +139,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         // add pager behavior
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(trailerRecyclerView);
-        trailerAdapter = new TrailerAdapter(this, trailers);
+        trailerAdapter = new TrailerAdapter(this);
         trailerRecyclerView.setAdapter(trailerAdapter);
 
         trailerRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());

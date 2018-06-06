@@ -22,9 +22,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
     private Context context;
     private List<Trailer> trailerList;
 
-    public TrailerAdapter(Context context, List<Trailer> trailerList) {
+    public TrailerAdapter(Context context) {
         this.context = context;
-        this.trailerList=trailerList;
     }
 
     @Override

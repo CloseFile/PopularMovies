@@ -86,9 +86,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     private Context context;
     private List<String> reviews;
 
-    public ReviewAdapter(Context context,List<String> reviews) {
+    public ReviewAdapter(Context context) {
         this.context = context;
-        this.reviews=reviews;
 //        this.overview=overview;
     }
 

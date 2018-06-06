@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         movieRecyclerView.setAdapter(mAdapter);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<List<Movie>> managerLoader = loaderManager.getLoader(MOVIES_LOADER);
+        Loader<List<Movie>> loader = loaderManager.getLoader(MOVIES_LOADER);
 
-        if (managerLoader == null) {
+        if (loader == null) {
             loaderManager.initLoader(MOVIES_LOADER, null, this);
         } else {
             loaderManager.restartLoader(MOVIES_LOADER, null, this);
